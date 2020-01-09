@@ -1,0 +1,75 @@
+// Homework – CS/IS 135 – 1050/51 - Lab - Chapter 2
+// Author: Matthew Boliard
+// Created 8 Jan 2020, Last Revised 8 Jan 2020
+// Program determines the least number of quarters, dimes, nickels and pennies needed to 
+// make up a user determined total value.  
+
+#include <iostream>
+#include <cmath>
+using namespace std; 
+
+int main()
+{
+  // set up the variables for use
+  int varTemp, varQ, varD, varN, varP, varNumCoins;
+  double varInputTotalValue, varTemp1, varTemp2, EPSILON; 
+  bool isInputOK; 
+  isInputOK = false; // set the boolean variable as false
+  EPSILON = 0.000000001;
+
+  // display a request for input of the total value, then get the total value 
+  // as a double precision floating point variable 
+  cout << "Please type in the total value in dollars, for example $1.32. \n"; 
+  
+  // create loop to get correct form of input
+  while (isInputOK == 0) // do this loop while the boolean variable is false
+  {
+    cout << "Input the total value: $";
+    cin >> varInputTotalValue;
+
+    // check if the input contained fractional pennies
+    varTemp = varInputTotalValue * 100;
+    varTemp1 = ((varInputTotalValue * 100) - varTemp);
+
+    if (abs((varInputTotalValue*100)-varTemp) > EPSILON)
+      // ring alarm and note error
+      cout << "\a\a\a\aWARNING! Your input cannot include fractions less than hundredths!\n";
+    else       
+      isInputOK = 1; // set boolean variable to true and end loop
+  }
+
+  // convert the input into an integer
+  varTemp = varInputTotalValue * 100; 
+
+  // calculate the number of whole quarters contained in the total value
+  varQ = varTemp / 25;
+  // set the temp variable to the modulus (remainder)
+  varTemp = varTemp % 25;
+
+  // calculate the number of whole dimes contained in the remainder
+  varD = varTemp / 10;
+  // set the temp variable to the modulus (remainder)
+  varTemp = varTemp % 10;
+
+  // calculate the number of whole nickels contained in the remainder
+  varN = varTemp / 5;
+  // set the number of whole pennies equal to the modulus (remainder)
+  varP = varTemp % 5;
+
+  // calculate the total number of coins
+  varNumCoins = varQ + varD + varN + varP;
+
+  // test that the total is correct and if yes then display information
+  if (varInputTotalValue == (varQ*.25 + varD*.10 + varN*.05 + varP*.01))
+  cout << "The total number of coins is: " << varNumCoins << endl 
+       << "There are \n" 
+       << "Quarters: " << varQ << "     subtotal: $ " << varQ*.25 << endl
+       << "Dimes:    " << varD << "     subtotal: $ " << varD*.10 << endl
+       << "Nickels:  " << varN << "     subtotal: $ " << varN*.05 << endl 
+       << "Pennies:  " << varP << "     subtotal: $ " << varP*.01 << endl
+       << "    Grand Total:  $" << varInputTotalValue << endl;
+    else
+  cout << "There was a problem with the calculation.";
+
+  return 0;
+}
