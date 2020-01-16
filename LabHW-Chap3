@@ -1,0 +1,89 @@
+// Homework - CS/IS 135 - 1050/51 - Lab - Chapter 3
+// Author: Matthew Boliard
+// Created 14 Jan 2020, Last Revised 15 Jan 2020
+/* Program calculates various ballistics information based on
+   user inputs of angle and velocity at start.  Program
+   assumes no air resistance, no wind, flat ground, and that 
+   starting position is at ground level. */ 
+
+/* Excercise requirements are to have user input, user output, 
+   cast, and some mathematical library. */   
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+
+int main() 
+{
+  const float GRAVITY = 9.8; // meters per second per second
+  const float DEG_TO_RAD = (3.1415926 / 180); // conversion factor 
+  double angleInput, velocityInput;
+  double totalVelocityInitial, angleDegrees, angleRadians;
+  double verticalVelocityInitial, horizontalVelocityInitial;
+  double timeRising, timeFalling, timeFlight;
+  double maxHeight, maxRange, totalVelocityImpact;
+  char varCont = 'y';  // to allow a do-while loop
+
+  cout << "\n\n\n\nWelcome to the BALLISTICS CALCULATOR."  << endl 
+       << "By entering an angle in degrees, and an initial velocity" << endl  
+       << "in meters per second, this calculator will determine the " << endl
+       << "maximum height that the projectile will reach, the distance " << endl
+       << "to the impact point, the time of flight, and the speed of" << endl
+       << "the projectile at the time of impact.\n" << endl;
+  
+  // Set up a loop so that user can run another calculation afterwards
+  while (varCont == 'y')
+  { 
+      cout << "Insert the angle of launch (in degrees): ";
+      cin >> angleInput; 
+      cout << "\nNow insert the velocity at launch (in meters/sec): ";
+      cin >> velocityInput;
+      cout << "\n Calculating...\n" << endl;
+
+      // Set angleDegrees to be the modulus of absolute value of angleInput divided by 180  
+      angleDegrees = (((int (abs(angleInput * 1000))) % (180 * 1000)) * (.001)); 
+      // Make sure the initial total velocity is greater than or equal to zero
+      totalVelocityInitial = abs(velocityInput);
+      cout << setw(15) << angleDegrees << " degrees and " << totalVelocityInitial 
+           << " m/s\n" << endl;
+      // Convert the angle to radians
+      angleRadians = angleDegrees * DEG_TO_RAD;
+      // Calculate the initial horizontal velocity
+      horizontalVelocityInitial = abs(cos(angleRadians) * totalVelocityInitial);
+      // Calculate the initial vertical velocity
+      verticalVelocityInitial = sin(angleRadians) * totalVelocityInitial;
+      // Calculate the time till the vertical velocity reaches zero
+      timeRising = verticalVelocityInitial / GRAVITY;
+      // Calculate the maximum height
+      maxHeight = ((verticalVelocityInitial * timeRising)- (0.5 * GRAVITY * pow(timeRising,2)));
+      // Calculate the time it takes to fall from maximum height
+      timeFalling = sqrt(2*maxHeight/GRAVITY);
+      // Calculate total time of flight
+      timeFlight = timeRising + timeFalling;
+      // Calculate the horizontal distance to impact point 
+      maxRange = horizontalVelocityInitial * timeFlight;
+      // Calculate the speed at impact
+      totalVelocityImpact = sqrt(pow(horizontalVelocityInitial,2)+ pow((GRAVITY*timeFalling),2)); 
+      // Send output of results to console
+      cout.setf(ios::fixed | ios::showpoint | ios::right);
+      cout.precision(4);
+      cout << "For an angle of " << setw(6) << angleDegrees 
+           << " degrees, and a starting velocity of " << endl 
+           << setw(6) << totalVelocityInitial << " meters per second," 
+           << "a projectile will reach the " << endl  
+           << "maximum height of " << setw(6) << maxHeight << " meters at "  
+           << setw(6) << timeRising << " seconds after" << endl
+           << "launch. The total time of flight for the projectile" << endl 
+           << "will be " << setw(6) << timeFlight << " seconds, and it will land " 
+           << setw(6) << maxRange << " meters" << endl
+           << "away. At the time of impact, the projectile will be travelling" << endl
+           << "at " << setw(6) << totalVelocityImpact << " meters per second." << endl;
+      cout << "\n\nWould you like to do another calculation? (y/n)";
+      cin >> varCont; // if 'y' is pressed, will repeat, otherwise exits the loop
+    }
+    cout << "\n\nThanks for trying out the Ballistics Calculator!  Good bye.";
+
+  return 0;
+}
