@@ -1,0 +1,211 @@
+// C++ Program
+// Homework - CS/IS 135 - 1050/51 - Lab - Chapter 4
+// Author: Matthew Boliard
+// Created 16 Jan 2020, Last Revised 16 Jan 2020
+/* Program calculates tax bracket and tax due based
+   on a given gross income and filing status. */
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+  char varTest = 'n', varTest2 = 'n';
+  char opselect, opselect2;
+  double inpIncome;
+  int grossIncome, netIncome, varBracket;
+  double incomeTax;
+
+  const int B1 = 10, B2 = 12, B3 = 22, B4 = 24, B5 = 32, B6 = 35, B7 = 37;
+  const int sB1 = 9875, sB2 = 40125, sB3 = 85525, sB4 = 163300, sB5 = 207350, sB6 = 518400;
+  const int jB1 = 19750, jB2 = 80250, jB3 = 171050, jB4 = 326600, jB5 = 414700, jB6 = 622050;
+  const int hB1 = 14100, hB2 = 53700, hB3 = 85500, hB4 = 163300, hB5 = 207350, hB6 = 518400;
+  const int sDeduct = 12400, jDeduct = 24800, hDeduct = 18650;
+
+  // Introduction and Choosing Filing Status
+  cout << "2020 Income Tax Calculator and Tax Brackets/n" << endl
+       << "There are three filing statuses to choose from:/n" << endl
+       << "1. Single ('s') \n2. Married, Filing Jointly ('m') or\n3. Head of Household ('h') " << endl;
+   
+  while (varTest != 'y') // loop to allow for validated input of filing status
+  {
+    cout  << "Please input your choice (s/m/h):" << flush;
+    cin >> opselect;
+  
+    // Validate Filing Status Selection - allowing for other possibly relevant choices and then a default
+    if (opselect == 'm' || opselect == 'j' || opselect == 'M' || opselect == 'J' || opselect == '2')
+      {
+          opselect = 'j';
+          cout << "\nYou have selected \"Married, Filing Jointly\"" << endl;
+          varTest = 'y';
+      }    
+    else if (opselect == 'h' || opselect == 'H' || opselect == '3')
+      {
+          opselect = 'h';
+          cout << "\nYou have selected \"Head of Household\"" << endl;
+          varTest = 'y';
+      }
+    else if (opselect == 's' || opselect == 'S' || opselect == '1')
+      {
+          opselect = 's';
+          cout << "\nYou have selected \"Single\"" << endl;
+          varTest = 'y';
+      }
+  }  // end do-while loop 
+ 
+  cout << "\nNow, enter your Gross Income: $" << flush;
+  while (varTest2 != 'y')  // loop to allow for validated input of gross income
+  {
+    // get the gross income
+    cin >> inpIncome;
+    grossIncome = round(inpIncome);
+    // validate the income input is not negative
+    if (grossIncome < 0)
+        cout << "\nThis value cannot be negative.  Please try again." << endl;
+    else (varTest2 = 'y');
+  }  // end do while loop
+  
+  switch (opselect)
+  {
+    case 's':
+      netIncome = grossIncome - sDeduct - 0.0;
+      if (netIncome < 0)
+        {
+        varBracket = 0;
+        netIncome = 0;
+        incomeTax = 0;
+        }
+      else if (netIncome > sB6)
+        {
+        varBracket = B7;
+        incomeTax = (((netIncome-sB6) * B7/100.0) + ((sB6-sB5) * B6/100.0) + ((sB5-sB4) * B5/100.0) + ((sB4-sB3) * B4/100.0) + ((sB3-sB2) * B3/100.0) + ((sB2-sB1) * B2/100.0) + (sB1 * B1/100.0));
+        }
+      else if (netIncome > sB5)
+        {
+        varBracket = B6;
+        incomeTax = (((netIncome-sB5) * B6/100.0) + ((sB5-sB4) * B5/100.0) + ((sB4-sB3) * B4/100.0) + ((sB3-sB2) * B3/100.0) + ((sB2-sB1) * B2/100.0) + (sB1 * B1/100.0));
+        }   
+      else if (netIncome > sB4) 
+        {
+        varBracket = B5;
+        incomeTax = (((netIncome-sB4) * B5/100.0) + ((sB4-sB3) * B4/100.0) + ((sB3-sB2) * B3/100.0) + ((sB2-sB1) * B2/100.0) + (sB1 * B1/100.0));
+        }
+      else if (netIncome > sB3) 
+        {
+        varBracket = B4;
+        incomeTax = (((netIncome-sB3) * B4/100.0) + ((sB3-sB2) * B3/100.0) + ((sB2-sB1) * B2/100.0) + (sB1 * B1/100.0));
+        }
+      else if (netIncome > sB2) 
+        {
+        varBracket = B3;
+        incomeTax = (((netIncome-sB2) * B3/100.0) + ((sB2-sB1) * B2/100.0) + (sB1 * B1/100.0));
+        }
+      else if (netIncome > sB1) 
+        {
+        varBracket = B2;
+        incomeTax = (((netIncome-sB1) * B2/100.0) + (sB1 * B1/100.0));
+        }
+      else if (netIncome > 0) 
+        {
+        varBracket = B1;
+        incomeTax = (netIncome * B1/100.0);
+        }
+      break;
+    case 'j':
+      netIncome = grossIncome - jDeduct - 0.0;
+      if (netIncome < 0)
+        {
+        varBracket = 0;
+        netIncome = 0;
+        incomeTax = 0;
+        }
+      else if (netIncome > jB6)
+        {
+        varBracket = B7;
+        incomeTax = (((netIncome-jB6) * B7/100.0) + ((jB6-jB5) * B6/100.0) + ((jB5-jB4) * B5/100.0) + ((jB4-jB3) * B4/100.0) + ((jB3-jB2) * B3/100.0) + ((jB2-jB1) * B2/100.0) + (jB1 * B1/100.0));
+        }
+      else if (netIncome > jB5)
+        {
+        varBracket = B6;
+        incomeTax = (((netIncome-jB5) * B6/100.0) + ((jB5-jB4) * B5/100.0) + ((jB4-jB3) * B4/100.0) + ((jB3-jB2) * B3/100.0) + ((jB2-jB1) * B2/100.0) + (jB1 * B1/100.0));
+        }   
+      else if (netIncome > jB4) 
+        {
+        varBracket = B5;
+        incomeTax = (((netIncome-jB4) * B5/100.0) + ((jB4-jB3) * B4/100.0) + ((jB3-jB2) * B3/100.0) + ((jB2-jB1) * B2/100.0) + (jB1 * B1/100.0));
+        }
+      else if (netIncome > jB3) 
+        {
+        varBracket = B4;
+        incomeTax = (((netIncome-jB3) * B4/100.0) + ((jB3-jB2) * B3/100.0) + ((jB2-jB1) * B2/100.0) + (jB1 * B1/100.0));
+        }
+      else if (netIncome > jB2) 
+        {
+        varBracket = B3;
+        incomeTax = (((netIncome-jB2) * B3/100.0) + ((jB2-jB1) * B2/100.0) + (jB1 * B1/100.0));
+        }
+      else if (netIncome > jB1) 
+        {
+        varBracket = B2;
+        incomeTax = (((netIncome-jB1) * B2/100.0) + (jB1 * B1/100.0));
+        }
+      else if (netIncome > 0) 
+        {
+        varBracket = B1;
+        incomeTax = (netIncome * B1/100.0);
+        }
+      break;
+    case 'h':
+      netIncome = grossIncome - hDeduct - 0.0;
+      if (netIncome < 0)
+        {
+        varBracket = 0;
+        netIncome = 0;
+        incomeTax = 0;
+        }
+      else if (netIncome > hB6)
+        {
+        varBracket = B7;
+        incomeTax = (((netIncome-hB6) * B7/100.0) + ((hB6-hB5) * B6/100.0) + ((hB5-hB4) * B5/100.0) + ((hB4-hB3) * B4/100.0) + ((hB3-hB2) * B3/100.0) + ((hB2-hB1) * B2/100.0) + (hB1 * B1/100.0));
+        }
+      else if (netIncome > hB5)
+        {
+        varBracket = B6;
+        incomeTax = (((netIncome-hB5) * B6/100.0) + ((hB5-hB4) * B5/100.0) + ((hB4-hB3) * B4/100.0) + ((hB3-hB2) * B3/100.0) + ((hB2-hB1) * B2/100.0) + (hB1 * B1/100.0));
+        }   
+      else if (netIncome > hB4) 
+        {
+        varBracket = B5;
+        incomeTax = (((netIncome-hB4) * B5/100.0) + ((hB4-hB3) * B4/100.0) + ((hB3-hB2) * B3/100.0) + ((hB2-hB1) * B2/100.0) + (hB1 * B1/100.0));
+        }
+      else if (netIncome > hB3) 
+        {
+        varBracket = B4;
+        incomeTax = (((netIncome-hB3) * B4/100.0) + ((hB3-hB2) * B3/100.0) + ((hB2-hB1) * B2/100.0) + (hB1 * B1/100.0));
+        }
+      else if (netIncome > hB2) 
+        {
+        varBracket = B3;
+        incomeTax = (((netIncome-hB2) * B3/100.0) + ((hB2-hB1) * B2/100.0) + (hB1 * B1/100.0));
+        }
+      else if (netIncome > hB1) 
+        {
+        varBracket = B2;
+        incomeTax = (((netIncome-hB1) * B2/100.0) + (hB1 * B1/100.0));
+        }
+      else if (netIncome > 0) 
+        {
+        varBracket = B1;
+        incomeTax = (netIncome * B1/100.0);
+        }
+      break;
+  }            // end of switch
+  
+  cout.setf(ios::fixed | ios::showpoint | ios::right);
+  cout.precision(2);
+  cout << "\nYou are in the " << setw(2) << varBracket << "% tax bracket." << endl
+       << "Your net taxable income would be $" << setw(4) << netIncome << " and your" << endl 
+       << "tax would be $" << setw(4) << incomeTax << ".\n" << endl;      
+return 0;
+}   // end of main()
